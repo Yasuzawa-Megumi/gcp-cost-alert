@@ -1,9 +1,8 @@
 from google.cloud import bigquery
 from datetime import datetime, timedelta, date
 import json
+import yaml
 import requests
-import os
-from datetime import datetime, timedelta, date
 
 query = """
     SELECT
@@ -19,8 +18,12 @@ query = """
     ;
 """
 
-#環境変数からSlackに通知するためのURLを取得
-SLACK_WEBHOOK_URL = os.environ['SLACK_WEBHOOK_URL']
+# YAMLファイルを開いて読み込む
+with open("config.yaml", "r", encoding="utf-8") as yaml_file:
+    config = yaml.safe_load(yaml_file)
+
+# Slackに通知するためのURLを取得
+SLACK_WEBHOOK_URL = config['SLACK_WEBHOOK_URL']
 
 
 def post_slack(event, context) -> None:
